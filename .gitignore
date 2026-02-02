@@ -1,0 +1,142 @@
+# ========================= 系统自动生成文件 =========================
+# Windows系统
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.tmp
+*.temp
+
+# Mac系统
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+ehthumbs_vista.db
+
+# Linux系统
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ========================= 编辑器/IDE配置文件 =========================
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ IDEA/Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+build/
+.gradle/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+tmp/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+.*.sw?
+unite.vim
+Session.vim
+tags
+tags.lock
+
+# ========================= 依赖/构建目录（核心，禁止上传） =========================
+# Node.js/前端
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+dist/
+build/
+coverage/
+*.local
+
+# Java
+target/
+*.jar
+*.war
+*.ear
+*.class
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+env/
+venv/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# Go
+vendor/
+bin/
+pkg/
+*.exe
+
+# ========================= 日志/缓存/临时文件 =========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+cache/
+tmp/
+temp/
+*.swp
+*.swo
+.DS_Store
+
+# ========================= 环境配置文件（含敏感信息，重点忽略） =========================
+.env
+.env.*
+!.env.example
+!.env.template
+config/local.js
+config/local.json
+*.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# ========================= 其他通用忽略项 =========================
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.bak
+*.backup
+.DS_Store
