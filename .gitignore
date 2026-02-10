@@ -145,3 +145,9 @@ logs
 module_explanation
 data
 .venv
+task_management.spec
+main.spec
+.venv
+build
+dist
+version_list

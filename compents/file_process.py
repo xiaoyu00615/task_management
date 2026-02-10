@@ -1,13 +1,28 @@
 import json
 import os.path
 import copy
+import sys
 
 
 class FileProcess:
-    # 绝对路径根目录
-    ROOT_FILE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))# 初始化创建data.json 文件
+    @staticmethod
+    def get_real_root_path():
+        """
+        获取程序运行的真实根目录（优先exe所在目录，其次源码目录）
+        """
+        if getattr(sys, 'frozen', False):
+            # 打包成exe运行：获取exe文件所在目录
+            root_path = os.path.dirname(os.path.abspath(sys.executable))
+        else:
+            # 源码运行：获取当前源码文件所在目录的上上级（根据你的项目层级调整）
+            current_file = os.path.abspath(__file__)
+            root_path = os.path.dirname(os.path.dirname(current_file))  # 按需调整层数
 
+        # 确保路径是绝对路径，避免相对路径混乱
+        return os.path.abspath(root_path)
 
+    # 类属性：真实根目录（指向exe/源码所在目录）
+    ROOT_FILE = get_real_root_path()
 
     @staticmethod
     def read_json(path) -> dict:

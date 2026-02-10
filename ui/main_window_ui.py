@@ -12,7 +12,7 @@ from compents.str_process import StrProcess
 from ui.main_window_compents.list_layout import ListLayout
 from ui.main_window_compents.event_def import EventDef
 from ui.uilt.assistant_def import AssistantDef
-from compents.tray_notifier import tray
+
 
 class MainWindowUI(QWidget):
     def __init__(self,parent=None):
@@ -236,7 +236,6 @@ class MainWindowUI(QWidget):
             is_update = AssistantDef.is_upgrade_urgency(old_urgency,end_time)
             if is_update:
                 # 修改紧急度
-                tray.send_notify(title="咕噜咕噜咕噜...", content=f"紧急度升级： {old_urgency} -> {is_update}")
                 task["urgency"] = is_update
 
                 # 修改权重

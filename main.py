@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication,QMainWindow
 from compents.log import logger
 from uilt.qss_tool.qss_load_tool import QssLoadTool
 from ui.main_window_ui import MainWindowUI
-from compents.tray_notifier import tray
+
 
 class MyMainWindow(QMainWindow):
 
@@ -27,8 +27,6 @@ class MyMainWindow(QMainWindow):
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
 
-    # 托盘弹窗启动
-    tray.send_notify(title="咕噜咕噜咕噜...", content="已启动！")
 
     # 加载qss 文件
     qss_file = ["original.qss","public.qss","main_window_ui.qss","segmentation.qss"]

@@ -1,6 +1,5 @@
 from compents.file_process import FileProcess
 from compents.log import logger
-from compents.tray_notifier import tray
 from ui.uilt.assistant_def import AssistantDef
 from ui.sub_window.modal_segmentation import ModalSegmentation
 
@@ -19,7 +18,6 @@ class EventDef:
         # 合并后重写入json数据
         FileProcess.write_json("data/tasks.json",origin_json)
 
-        tray.send_notify(title="咕噜咕噜咕噜...",content="已写入消息!")
 
         main_window.unfinished_list_task_data = origin_json["unfinished_list"]
 
