@@ -1,0 +1,18 @@
+
+#segmentation_title_un{
+    font-size:16px;
+    font-weight:bold;
+    color:#333333;
+}
+
+#segmentation_content{
+    color:#666666;
+}
+
+#segmentation_create_time{
+    color:#81C784;
+}
+
+#segmentation_end_time{
+    color:#90CAF9;
+}

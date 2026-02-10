@@ -1,16 +1,48 @@
-# 这是一个示例 Python 脚本。
+import sys
 
-# 按 Shift+F10 执行或将其替换为您的代码。
-# 按 双击 Shift 在所有地方搜索类、文件、工具窗口、操作和设置。
+from PyQt5.QtWidgets import QApplication,QMainWindow
+
+from compents.log import logger
+from uilt.qss_tool.qss_load_tool import QssLoadTool
+from ui.main_window_ui import MainWindowUI
+from compents.tray_notifier import tray
+
+class MyMainWindow(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        logger.info("启动主窗口！")
+
+        # 设置窗口基础类型
+        self.setWindowTitle("task_management")
+        self.resize(1280,600)
+        self.move(300,200)
+        
+
+    def __del__(self):
+        logger.info("窗口关闭！")
 
 
-def print_hi(name):
-    # 在下面的代码行中使用断点来调试脚本。
-    print(f'Hi, {name}')  # 按 Ctrl+F8 切换断点。
-
-
-# 按装订区域中的绿色按钮以运行脚本。
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    my_app = QApplication(sys.argv)
 
-# 访问 https://www.jetbrains.com/help/pycharm/ 获取 PyCharm 帮助
+    # 托盘弹窗启动
+    tray.send_notify(title="咕噜咕噜咕噜...", content="已启动！")
+
+    # 加载qss 文件
+    qss_file = ["original.qss","public.qss","main_window_ui.qss","segmentation.qss"]
+    qss = QssLoadTool.load_multi_qss(qss_file)
+    my_app.setStyleSheet(qss)
+    logger.info("qss文件加载完成")
+
+    my_window = MyMainWindow()
+
+    # main_window_ui控件
+    main_window_ui = MainWindowUI(my_window)
+
+    my_window.show()
+    sys.exit(my_app.exec_())
+
+
+

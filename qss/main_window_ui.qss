@@ -1,0 +1,26 @@
+#form_key_style{
+    font-size: 14px;
+    color:#000;
+}
+
+#form_value_style{
+    font-size:13px;
+}
+
+#list_layout{
+    border:1px solid #666666;
+    border-radius: 10px;
+}
+
+#item_style{
+    border-top:1px solid #000;
+}
+
+#title_name{
+    font-size:20px;
+    font-weight:bold;
+}
+
+#color_block{
+    border-radius:4px;
+}

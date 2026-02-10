@@ -1,0 +1,61 @@
+QLabel{
+    font-family: "微软雅黑";
+}
+
+QLineEdit{
+    font-family: "微软雅黑";
+    padding:3px 10px;
+    border-radius: 5px;
+}
+
+QTextEdit {
+    font-family: "微软雅黑";
+    /* 必须设置 border，否则 border-radius 无依附载体 */
+    border: 1px solid #ddd;
+    /* 圆角生效的核心：必须配合 border 和 background */
+    border-radius: 5px;
+    background-color: #fff;
+    /* 防止背景色溢出圆角 */
+    background-clip: padding-box;
+    /* 清除外层冗余 padding，避免和内层冲突 */
+    padding: 0;
+}
+
+/* 关键：给文本显示的视口设置内边距 */
+QTextEdit > QWidget#qt_scrollarea_viewport {
+    margin: 3px 10px; /* 这就是文本和输入框边缘的内填充 */
+}
+
+/* 统一占位文本的内边距，避免错位 */
+QTextEdit QPlaceholderText {
+    padding: 3px 10px;
+    color: #999;
+}
+
+
+QDateTimeEdit{
+    font-family: "微软雅黑";
+    padding:3px 10px;
+    border-radius: 5px;
+}
+
+QComboBox{
+    font-family: "微软雅黑";
+    padding:3px 10px;
+    border-radius: 5px;
+}
+
+QPushButton{
+    font-family: "微软雅黑";
+    padding:5px 10px;
+}
+QPushButton:focus {
+    outline: none;  /* 指定按钮清除虚线 */
+}
+QPushButton:focus {
+    outline: none;  /* 全局按钮清除虚线 */
+}
+
+QScrollArea{
+    border:none;
+}

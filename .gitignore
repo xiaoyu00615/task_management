@@ -140,3 +140,8 @@ config/local.json
 *.bak
 *.backup
 .DS_Store
+
+logs
+module_explanation
+data
+.venv

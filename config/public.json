@@ -1,0 +1,75 @@
+{
+  "important_map": [
+    "1-重要且紧急",
+    "2-重要且不紧急",
+    "3-不重要且紧急",
+    "4-不重要且不紧急"
+  ],
+  "category_map": [
+    "学习",
+    "工作",
+    "生活",
+    "娱乐",
+    "其他"
+  ],
+  "label_map": [
+    "（无标签）",
+    "重要",
+    "紧急",
+    "常规",
+    "计划"
+  ],
+  "urgency_color_map" : {
+    "0": {
+      "solid": "#333333",
+      "transparent_50": "rgba(51, 51, 51, 0.5)"
+    },
+    "1": {
+      "solid": "#CC0000",
+      "transparent_50": "rgba(204, 0, 0, 0.5)"
+    },
+    "2": {
+      "solid": "#CC4400",
+      "transparent_50": "rgba(204, 68, 0, 0.5)"
+    },
+    "3": {
+      "solid": "#CC7700",
+      "transparent_50": "rgba(204, 119, 0, 0.5)"
+    },
+    "4": {
+      "solid": "#CCAA00",
+      "transparent_50": "rgba(204, 170, 0, 0.5)"
+    },
+    "5": {
+      "solid": "#CCCC00",
+      "transparent_50": "rgba(204, 204, 0, 0.5)"
+    },
+    "6": {
+      "solid": "#AACC00",
+      "transparent_50": "rgba(170, 204, 0, 0.5)"
+    },
+    "7": {
+      "solid": "#77CC00",
+      "transparent_50": "rgba(119, 204, 0, 0.5)"
+    },
+    "8": {
+      "solid": "#44CC00",
+      "transparent_50": "rgba(68, 204, 0, 0.5)"
+    },
+    "9": {
+      "solid": "#00CC00",
+      "transparent_50": "rgba(0, 204, 0, 0.5)"
+    },
+    "10": {
+      "solid": "#777777",
+      "transparent_50": "rgba(119, 119, 119, 0.5)"
+    }
+  },
+  "importance_color_map": {
+    "1": "#B30000",
+    "2": "#1A46C0",
+    "3": "#2E75D9",
+    "4": "#777777"
+  }
+}
+
