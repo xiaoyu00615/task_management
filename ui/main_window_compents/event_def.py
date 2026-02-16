@@ -2,6 +2,8 @@ from compents.file_process import FileProcess
 from compents.log import logger
 from ui.uilt.assistant_def import AssistantDef
 from ui.sub_window.modal_segmentation import ModalSegmentation
+from compents.load_path import load_path
+
 
 class EventDef:
 
@@ -12,11 +14,11 @@ class EventDef:
 
 
         # 处理原数据和最新数据进行合并
-        origin_json = FileProcess.read_json("data/tasks.json")
+        origin_json = FileProcess.read_json(load_path["store"]["task"])
         origin_json["unfinished_list"].append(int_task_data)
 
         # 合并后重写入json数据
-        FileProcess.write_json("data/tasks.json",origin_json)
+        FileProcess.write_json(load_path["store"]["task"],origin_json)
 
 
         main_window.unfinished_list_task_data = origin_json["unfinished_list"]
@@ -38,7 +40,7 @@ class EventDef:
     @staticmethod
     def on_del_task(task_data,update_list):
         logger.info(f"触发删除事件 -> {task_data}数据")
-        AssistantDef.task_del(task_data,"data/tasks.json")
+        AssistantDef.task_del(task_data,load_path["store"]["task"])
 
         EventDef.refresh_all_list(update_list)
 

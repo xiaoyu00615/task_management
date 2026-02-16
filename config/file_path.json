@@ -1,3 +1,16 @@
 {
-  "start_file": "config/init.json"
+  "template": "config/init.json",
+  "store":{
+    "task": "data/tasks.json",
+    "chat": "data/chats.json",
+    "diary": "data/diary.json"
+  },
+  "ai_chat": {
+    "api_key": "config/api_key.json",
+    "privacy": "privacy_data/api_key.json"
+  },
+  "data_map": "config/public.json",
+  "time":{
+    "data_refresh": 1000
+  }
 }

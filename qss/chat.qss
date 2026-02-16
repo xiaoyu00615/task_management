@@ -1,0 +1,36 @@
+#chat_history_weight{
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+#image{
+    min-width: 80px;
+    max-width: 80px;
+    min-height: 40px;
+    max-height: 40px;
+    border-radius: 20px;
+    background-color: #ddd;
+    text-align: center;
+    line-height: 40px;
+    margin: 0 10px;
+}
+
+#ai_content{
+    padding: 10px 15px;
+    background-color: #f0f2f5;
+    border-radius: 18px;
+    color: #333;
+    word-wrap: true;
+    font-size: 14px;
+    border: none;
+}
+#my_content{
+    padding: 10px 15px;
+    background-color: #409eff;
+    border-radius: 18px;
+    color: white;
+    word-wrap: true;
+    font-size: 14px;
+    border: none;
+}

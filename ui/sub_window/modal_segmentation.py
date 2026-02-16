@@ -1,17 +1,17 @@
 import datetime
 
-from PyQt5.QtCore import QDateTime, Qt
-from PyQt5.QtWidgets import QWidget, QDialog, QVBoxLayout, QLabel, QHBoxLayout, QFormLayout, QLineEdit, QDateTimeEdit, \
-    QComboBox, QPushButton, QTableWidget, QTextEdit, QScrollArea
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QDialog, QVBoxLayout, QLabel, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QTextEdit, QScrollArea
 
 from compents.file_process import FileProcess
 from ui.main_window_compents.event_modal_segmentation import EventModalSegmentation
-
+from compents.load_path import load_path
 
 class ModalSegmentation(QDialog):
     def __init__(self,parent=None,task=None):
         super().__init__(parent)
         self.task_item_widget = None
+        self.parent = parent
         self.task = task
         self.task_status = task.get("status", None)
         self.all_segmentation_task = task.get("segmentation", None)
@@ -121,7 +121,7 @@ class ModalSegmentation(QDialog):
 
 
     def get_data(self):
-        max_segmentation_id = FileProcess.read_json_attribute("data/tasks.json",["max_segmentation_id"])
+        max_segmentation_id = FileProcess.read_json_attribute(load_path["store"]["task"],["max_segmentation_id"])
 
         return {
             "segmentation_id": max_segmentation_id + 1,
@@ -145,7 +145,7 @@ class ModalSegmentation(QDialog):
 
 
 
-
+        print(task,"create_task_item_ui:task")
         name_ql = QLabel(f"{index}、{task.get("name", None)}")
         name_ql.setObjectName("segmentation_title_un")
         task_item_down_layout.addWidget(name_ql)
@@ -213,7 +213,7 @@ class ModalSegmentation(QDialog):
 
 
     def refresh_all_segmentation_tasks_ui(self,task_list_item):
-        get_data = FileProcess.read_json("data/tasks.json")
+        get_data = FileProcess.read_json(load_path["store"]["task"])
 
 
         self.del_all_tasks_ui()
@@ -232,7 +232,7 @@ class ModalSegmentation(QDialog):
                 items_list["segmentation"] = task_list_item["segmentation"]
                 break
 
-        FileProcess.write_json("data/tasks.json",get_data)
+        FileProcess.write_json(load_path["store"]["task"],get_data)
 
 
     def del_segmentation_tasks(self,task_list,task):

@@ -1,8 +1,6 @@
 from compents.str_process import StrProcess
 from compents.file_process import FileProcess
 
-
-
 class CalculateProcess:
 
     @staticmethod

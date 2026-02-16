@@ -1,11 +1,10 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QProgressBar
 from ui.main_window_compents.event_def import EventDef
-from compents.calculate_process import CalculateProcess
 from compents.time_process import TimeProcess
 import datetime
 from compents.file_process import FileProcess
 from compents.str_process import StrProcess
+from compents.load_path import load_path
 
 class ItemWidget(QWidget):
     def __init__(self,task,list_layout,parent,index):
@@ -18,7 +17,7 @@ class ItemWidget(QWidget):
         self.index = index
 
         # 获取数据
-        self.color_map = FileProcess.read_json('config/public.json')
+        self.color_map = FileProcess.read_json(load_path["data_map"])
         self.important_color_map = self.color_map.get("importance_color_map",{"1": "#AAAAAA","2": "#777777","3": "#4488FF","4": "#4444FF"})
         self.urgency_color_map = self.color_map.get("urgency_color_map",{"0": "#666666","1": "#FF4444","2": "#FF7744", "3": "#FFAA44","4": "#FFDD44","5": "#FFFF44","6": "#DDFF44","7": "#AAFF44","8": "#77FF44", "9": "#44FF44","10": "#AAAAAA"})
 
@@ -193,16 +192,18 @@ class ItemWidget(QWidget):
 
         btn_layout.addWidget(segmentation)
 
+        # 完成
+        if self.status == "overtime" or self.status == "unfinished":
+            complete_btn = QPushButton("完成")
+            complete_btn.clicked.connect(lambda: EventDef.on_complete_task(self.task,self.list_layout.values()))
+            btn_layout.addWidget(complete_btn)
+
         # 删除
         del_btn = QPushButton("删除")
-        del_btn.clicked.connect(lambda: EventDef.on_del_task(self.task,[self.parent]))
-        # 完成
-        complete_btn = QPushButton("完成")
-        complete_btn.clicked.connect(lambda: EventDef.on_complete_task(self.task,self.list_layout.values()))
-
+        del_btn.clicked.connect(lambda: EventDef.on_del_task(self.task, [self.parent]))
         btn_layout.addWidget(del_btn)
 
-        btn_layout.addWidget(complete_btn)
+
         content_layout.addWidget(btn_widget)
 
         item_content_layout.addWidget(color_content_widget)

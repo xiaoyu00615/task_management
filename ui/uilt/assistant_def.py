@@ -1,7 +1,4 @@
 
-
-from PyQt5.QtWidgets import QWidget
-
 from compents.log import logger
 from compents.file_process import FileProcess
 from compents.time_process import TimeProcess
@@ -84,12 +81,10 @@ class AssistantDef:
         return leve
 
 
-
-
-
-
     @staticmethod
     def task_status_change(new_status,task,path):
+        print("===================================================")
+        print(task,"任务状态改变")
         """
         任务状态改变
         :param new_status: 新状态
@@ -120,6 +115,9 @@ class AssistantDef:
         all_tasks[f"{new_status}_list"].append(new_task)
 
         # print(f"处理好的数据,{all_tasks}")
+        print("new_task:",new_task)
+        print("改变写入数据的",all_tasks)
+        print("=====================================================")
         FileProcess.write_json(path,all_tasks)
         return True
 
@@ -194,7 +192,6 @@ class AssistantDef:
         return [ task for task in tasks if item["id"] != task["id"]]
 
 
-    @staticmethod
     @staticmethod
     def tasks_sort(tasks: list, weight: str):
         """

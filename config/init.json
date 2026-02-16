@@ -1,9 +1,31 @@
 {
-    "start_data": {
+    "start_task": {
         "max_id": 0,
         "max_segmentation_id": 0,
         "unfinished_list": [],
         "overtime_list": [],
         "completed_list": []
+    },
+    "ai_chat":{
+      "max_id": 1,
+      "ai_name": "星火AI",
+      "my_name": "鱼玖玥",
+      "dialogue": [{
+        "id":1,
+        "chat_number": 1,
+        "ai_messages": [
+        {
+          "type": "ai",
+          "message": "你好，我是星火大模型有什么能帮助你！"
+        }
+      ],
+      "my_messages": []
+      }]
+    },
+    "diary":{
+      "max_id": 0,
+      "ordinary_list": [],
+      "collection_list": []
     }
+
 }

@@ -124,6 +124,13 @@ class TimeProcess:
         except Exception as e:
             logger.error(f"获取进度率失败 -> {e}")
 
+    @staticmethod
+    def now_week():
+        now_date = datetime.datetime.now()
+
+        week_num = now_date.weekday()
+        week_list = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+        return week_list[week_num]
 
 
 

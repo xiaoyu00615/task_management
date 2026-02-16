@@ -1,9 +1,10 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QVBoxLayout, QLabel, QGroupBox, QHBoxLayout, QWidget, QScrollArea
+from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget, QScrollArea
 from ui.main_window_compents.item_widget import ItemWidget
 from compents.file_process import FileProcess
 from compents.log import logger
 from ui.uilt.assistant_def import AssistantDef
+from compents.load_path import load_path
 
 class ListLayout(QWidget):
     def __init__(self,status,parent=None,main_window=None):
@@ -73,7 +74,8 @@ class ListLayout(QWidget):
 
     def get_all_tasks(self):
 
-        return FileProcess.read_json("data/tasks.json")
+        return FileProcess.read_json(load_path["store"]["task"])
+
 
     def _load_items(self):
         """加载列表项（抽离成独立方法，方便刷新调用）"""

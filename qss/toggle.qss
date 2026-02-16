@@ -1,0 +1,27 @@
+
+QWidget #toggle_title{
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:10px;
+    border-bottom:1px solid #000;
+}
+
+#toggle_btn{
+    border:none;
+    font-size:14px;
+    padding:10px 3px;
+}
+#toggle_btn:checked{
+    border-left:5px solid #409eff;
+    font-weight:bold;
+    font-size:15px;
+}
+#toggle_btn:hover:!checked {
+    background:#d9ecff;
+}
+
+
+#toggle_border{
+    border-right:1px solid #000;
+}
+

@@ -1,17 +1,20 @@
 import datetime
 
-from PyQt5.QtCore import QDateTime, qQNaN, QTimer
-from PyQt5.QtWidgets import QLabel, QFormLayout, QWidget, QLineEdit, QDateEdit, QComboBox, QDateTimeEdit, QPushButton, \
-    QHBoxLayout, QVBoxLayout
+from PyQt5.QtCore import QDateTime, QTimer, Qt
+from PyQt5.QtWidgets import QLabel, QWidget, QLineEdit, QComboBox, QDateTimeEdit, QPushButton, \
+    QHBoxLayout, QVBoxLayout, QStackedWidget
 
 from compents.log import logger
 from compents.file_process import FileProcess
 from compents.time_process import TimeProcess
 from compents.calculate_process import CalculateProcess
-from compents.str_process import StrProcess
-from ui.main_window_compents.list_layout import ListLayout
+
 from ui.main_window_compents.event_def import EventDef
 from ui.uilt.assistant_def import AssistantDef
+from ui.main_window_compents.toggle_page.chat_page import ChatPage
+from ui.main_window_compents.toggle_page.task_page import TaskPage
+from ui.main_window_compents.toggle_page.diary_page import DiaryPage
+from compents.load_path import load_path
 
 
 class MainWindowUI(QWidget):
@@ -19,7 +22,7 @@ class MainWindowUI(QWidget):
         super().__init__(parent)
         self.parent = parent
         self.unfinished_list_task_data = []
-        self.timer_ms = FileProcess.read_json_attribute("config/setting.json",["time","data_refresh"])
+        self.timer_ms = load_path["time"]["data_refresh"]
         self.all_list = {}
         logger.info("主窗口UI控件类")
         self._init_ui()
@@ -28,43 +31,74 @@ class MainWindowUI(QWidget):
     def _init_ui(self):
         logger.info("正在创建MainWindowUI")
 
+        # 主布局
         main_layout = QHBoxLayout()
 
-        # 左侧表单容器控件
-        left_form_widget = QWidget(self.parent)
-        left_form_widget.setFixedWidth(280)
-        # 左侧表单
-        form_layout = QFormLayout(left_form_widget)
-        form_layout.setSpacing(10)
-        self._init_form_widgets(form_layout)
+        # 顶部切换栏
+        switch_bar = QWidget()
+        switch_bar.setContentsMargins(0,0,0,0)
 
-        # 右侧区域
-        main_right_widget = QWidget(self.parent)
+        switch_bar.setFixedWidth(150)
 
-        main_right_layout = QHBoxLayout(main_right_widget)
+        switch_bar.setObjectName("toggle_border")
+        switch_layout = QVBoxLayout(switch_bar)
+        switch_layout.setSpacing(0)
+
+        # 页面：
+        page_title = QLabel("页面-切换")
+        page_title.setObjectName("toggle_title")
+        page_title.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        switch_layout.addWidget(page_title)
+
+        # 查看任务项
+        self.task_btn = QPushButton("任务")
+        self.task_btn.setCheckable(True)
+        self.task_btn.setChecked(True)
+        self.task_btn.setObjectName("toggle_btn")
+        self.task_btn.clicked.connect(lambda: self._switch_page(0))
+
+        # AI 聊天按钮
+        self.chat_btn = QPushButton("AI聊天")
+        self.chat_btn.setCheckable(True)
+        self.chat_btn.setObjectName("toggle_btn")
+        self.chat_btn.clicked.connect(lambda:self._switch_page(1))
+
+        # 日记按钮
+        self.diary_btn = QPushButton("日记")
+        self.diary_btn.setCheckable(True)
+        self.diary_btn.setObjectName("toggle_btn")
+        self.diary_btn.clicked.connect(lambda:self._switch_page(2))
 
 
-        self.unfinished_list = ListLayout("unfinished",self.parent,self)
-        self.overtime_list = ListLayout("overtime",self.parent,self)
-        self.completed_list = ListLayout("completed",self.parent,self)
+        switch_layout.addWidget(self.task_btn)
+        switch_layout.addWidget(self.chat_btn)
+        switch_layout.addWidget(self.diary_btn)
+        switch_layout.addStretch()
 
-        self.all_list = {
-            "unfinished":self.unfinished_list,
-            "overtime":self.overtime_list,
-            "completed":self.completed_list
-        }
+        # 创建内容窗口
+        self.stacked_weight = QStackedWidget(self.parent)
+        self.stacked_weight.setContentsMargins(0,0,0,0)
+
+        # 第一个页面
+        # 任务管理页面
+        task_page = TaskPage(self)
+        self.task_page = task_page.task_container
+        self.stacked_weight.addWidget(self.task_page)
+
+        # AI 聊天页面
+        chat_page = ChatPage(self.parent)
+        self.chat_page = chat_page.chat_container
+        self.stacked_weight.addWidget(self.chat_page)
+
+        # 日记页面
+        self.new_diary_page = DiaryPage(self.parent)
+        self.diary_page = self.new_diary_page.diary_container
+        self.stacked_weight.addWidget(self.diary_page)
 
 
-        main_right_layout.addWidget(self.unfinished_list.container)
-        main_right_layout.addWidget(self.overtime_list.container)
-        main_right_layout.addWidget(self.completed_list.container)
-
-
-
-
-        # 组合
-        main_layout.addWidget(left_form_widget)
-        main_layout.addWidget(main_right_widget)
+        # 组合布局
+        main_layout.addWidget(switch_bar)
+        main_layout.addWidget(self.stacked_weight)
 
         # 主布局
         main_widget = QWidget(self.parent)
@@ -111,7 +145,7 @@ class MainWindowUI(QWidget):
         self.task_important_combo_box = QComboBox(self.parent)
         self.task_important_combo_box.setObjectName("form_value_style")
 
-        important_list = FileProcess.read_json_attribute("config/public.json", ["important_map"])
+        important_list = FileProcess.read_json_attribute(load_path["data_map"], ["important_map"])
         # print(important_list,"important")
         self.task_important_combo_box.addItems(important_list)
         parent_layout.addRow(task_important_label, self.task_important_combo_box)
@@ -122,7 +156,7 @@ class MainWindowUI(QWidget):
 
         self.task_category_combo_box = QComboBox(self.parent)
         self.task_category_combo_box.setObjectName("form_value_style")
-        category_list = FileProcess.read_json_attribute("config/public.json", ["category_map"])
+        category_list = FileProcess.read_json_attribute(load_path["data_map"], ["category_map"])
         self.task_category_combo_box.addItems(category_list)
         parent_layout.addRow(task_category_label, self.task_category_combo_box)
 
@@ -133,7 +167,7 @@ class MainWindowUI(QWidget):
 
         self.task_label_combo_box = QComboBox(self.parent)
         self.task_label_combo_box.setObjectName("form_value_style")
-        label_list = FileProcess.read_json_attribute("config/public.json", ["label_map"])
+        label_list = FileProcess.read_json_attribute(load_path["data_map"], ["label_map"])
         self.task_label_combo_box.addItems(label_list)
         parent_layout.addRow(task_label_label, self.task_label_combo_box)
 
@@ -154,19 +188,19 @@ class MainWindowUI(QWidget):
 
     def _get_value(self):
         # 判断是不是初次加载
-        if not FileProcess.is_root_file("data/tasks.json"):
-            logger.debug(f"没有这个目录进行创建-> {'data/tasks.json'}")
+        if not FileProcess.is_root_file(load_path["store"]["task"]):
+            logger.debug(f"没有这个目录进行创建-> {load_path["store"]["task"]}")
             # 获取结构json
-            init_structure = FileProcess.read_json_attribute("config/init.json",["start_data"])
+            init_structure = FileProcess.read_json_attribute(load_path["template"],["start_data"])
             # 创建文件及文件夹，传入结构json
-            FileProcess.create_dir_file("data/tasks.json",init_structure)
+            FileProcess.create_dir_file(load_path["store"]["task"],init_structure)
 
         # 获取最大唯一 id
-        max_id = FileProcess.read_json_attribute("data/tasks.json",["max_id"])
+        max_id = FileProcess.read_json_attribute(load_path["store"]["task"],["max_id"])
 
         max_id += 1
         # 写入回去max_id + 1
-        FileProcess.write_json_attribute("data/tasks.json",["max_id"],max_id)
+        FileProcess.write_json_attribute(load_path["store"]["task"],["max_id"],max_id)
 
         # 创建时间
         create_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -183,7 +217,8 @@ class MainWindowUI(QWidget):
         # print(urgency,"紧急度")
 
         weight_value = CalculateProcess.calculate_task_weight(important,urgency)
-        return {
+
+        obj = {
             "id":max_id,
             "name": self.task_name_line_edit.text().strip(),
             "create_time": create_time,
@@ -196,8 +231,9 @@ class MainWindowUI(QWidget):
             "weight":weight_value,
             "status": "unfinished",
             "segmentation": []
-
         }
+        self.task_name_line_edit.setText("")
+        return obj
 
     def _init_time(self):
         """
@@ -217,6 +253,7 @@ class MainWindowUI(QWidget):
 
 
     def is_all_list_overtime(self):
+        # print(self.unfinished_list_task_data,"self.unfinished_list_task_data")
         for task in self.unfinished_list_task_data:
             # print(self.unfinished_list_task_data,"unfinished_list_task_data")
             # 判断超时
@@ -225,7 +262,7 @@ class MainWindowUI(QWidget):
             has_overtime = AssistantDef.is_task_timeout(end_time)
             # print(has_overtime,"我超时了吗",task,"这个任务")
             if has_overtime:
-                AssistantDef.task_status_change("overtime",task,"data/tasks.json")
+                AssistantDef.task_status_change("overtime",task,load_path["store"]["task"])
                 self.all_list["overtime"].refresh_list()
                 self.all_list["unfinished"].refresh_list()
 
@@ -245,7 +282,7 @@ class MainWindowUI(QWidget):
                 weight_value = CalculateProcess.calculate_task_weight(important_value,is_update)
                 task["weight"] = weight_value
 
-                FileProcess.write_json_attribute("data/tasks.json",["unfinished_list"],self.unfinished_list_task_data)
+                FileProcess.write_json_attribute(load_path["store"]["task"],["unfinished_list"],self.unfinished_list_task_data)
                 self.all_list["unfinished"].refresh_list()
 
 
@@ -255,3 +292,21 @@ class MainWindowUI(QWidget):
         self.all_list["unfinished"].refresh_list()
         self.all_list["overtime"].refresh_list()
         self.is_all_list_overtime()
+
+        # 日记页实时日期
+        now_time = datetime.datetime.now().strftime('%Y年%m月%d日 %H时%M分%S秒')
+        now_week = TimeProcess.now_week()
+        self.new_diary_page.now_time_label.setText(f"{now_time} · {now_week}")
+
+
+
+
+
+    def _switch_page(self,index):
+        # 切换页面
+        self.stacked_weight.setCurrentIndex(index)
+
+        # 更新状态
+        self.task_btn.setChecked(index == 0)
+        self.chat_btn.setChecked(index == 1)
+        self.diary_btn.setChecked(index == 2)

@@ -1,0 +1,77 @@
+#diary_block_weight{
+    border-right: 1px solid #000;
+    padding: 10px;
+}
+
+#now_time_label{
+    color:#666;
+    font-size:20px;
+    font-weight:bold;
+}
+
+#label_style{
+    font-size:14px;
+    padding:2px 0px;
+}
+
+#entry_style{
+    padding:5px 10px;
+    font-size:12px;
+    border:1px solid #ccc;
+}
+#write_ok{
+    padding:10px 5px;
+    font-size:12px;
+}
+
+#title{
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;
+    font-weight: bold; /* 加粗增强焦点 */
+    font-size: 22px;        /* 大字号突出标题 */
+    font-weight: bold;      /* 加粗增强视觉焦点 */
+    letter-spacing: 0.15em; /* 字间距轻微拉开，更舒展 */
+    line-height: 1.2;       /* 行间距紧凑，符合标题特性 */
+    color: #2d3748;         /* 深灰黑色，不刺眼 */
+    margin-bottom: 8px;
+}
+#small{
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+}
+#emotion{
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+}
+#weather{、
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;    font-size: 14px;
+    font-weight: 500;       /* 半粗体，区分普通文本 */
+    letter-spacing: 0.05em;
+    padding:0 0 10px 0;
+}
+#content{
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;
+    font-size: 16px;        /* 屏幕阅读最佳字号（15-17px） */
+    letter-spacing: 0.1em;  /* 轻微字间距，避免文字拥挤 */
+    color: #374151;         /* 适中灰色，比标题浅，比辅助文本深 */
+    text-indent: 2em;       /* 首行缩进2字符 */
+    padding: 10px 0;
+}
+reading_num{
+    font-family: "Microsoft YaHei", "Source Han Sans SC", "PingFang SC", sans-serif;
+    font-weight: normal; /* 常规字重，进一步弱化 */
+    font-size: 12px;
+    color: #9ca3af;         /* 浅灰色，弱化视觉焦点 */
+    letter-spacing: 0.05em;
+}
+#create_time{
+    font-family: "Consolas", "Monaco", "Source Code Pro", monospace; /* 等宽字体，数字对齐更整齐 */
+    font-size: 12px;
+    color: #9ca3af;
+    letter-spacing: 0.05em;
+}
+
+
+
+

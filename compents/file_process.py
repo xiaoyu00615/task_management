@@ -1,6 +1,5 @@
 import json
 import os.path
-import copy
 import sys
 
 
@@ -147,6 +146,7 @@ class FileProcess:
 
         # 如果是一层就直接修改保存
         if len(attrs) <= 1:
+            print(new_json[attrs[0]],"直接一层读取")
             new_json[attrs[0]] = content
 
         else:
@@ -160,6 +160,7 @@ class FileProcess:
             new_json[last_attr] = content
 
         # 重新写入json文件s
+        print(json_data,"写入内容")
         FileProcess.write_json(paths,json_data)
         # logger.info(f"写入属性成功 -> {paths}")
         return True
@@ -216,6 +217,9 @@ class FileProcess:
         if os.path.exists(os.path.join(FileProcess.ROOT_FILE,path)):
             return True
         return False
+
+
+
 
 
 if __name__ == "__main__":

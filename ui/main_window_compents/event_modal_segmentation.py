@@ -2,12 +2,12 @@ import datetime
 
 from compents.log import logger
 from compents.file_process import FileProcess
-from ui.uilt.assistant_def import AssistantDef
-
+from compents.load_path import load_path
 
 class EventModalSegmentation:
     @staticmethod
     def on_segmentation_create_task(this,task,segmentation_task_item):
+        print(task,"创建细分")
 
         # 创建任务
         logger.debug(f"创建细分任务 -> {segmentation_task_item} -> {task}")
@@ -17,16 +17,17 @@ class EventModalSegmentation:
         status_list = f"{task["status"]}_list"
 
 
-        get_json = FileProcess.read_json("data/tasks.json")
+        get_json = FileProcess.read_json(load_path["store"]["task"])
         # 修改最大索引
         get_json["max_segmentation_id"] = segmentation_task_item["segmentation_id"]
-
+        FileProcess.write_json(load_path["store"]["task"],get_json)
         items = None
-        for items in get_json[status_list]:
+        for index,items in enumerate(get_json[status_list]):
             if items["id"] == task["id"]:
                 items["segmentation"].append(segmentation_task_item)
+                if task["status"] == "uncompleted":
+                    this.parent.main_window.unfinished_list_task_data[index]["segmentation"].append(segmentation_task_item)
                 break
-
 
         this.refresh_all_segmentation_tasks_ui(items)
 

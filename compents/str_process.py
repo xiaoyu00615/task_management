@@ -51,7 +51,20 @@ class StrProcess:
         logger.info(f"传入的返回类型不正确 -> {rest_type}")
         return None
 
+    @staticmethod
+    def specify_str_num_pad(str_content,num,pad=None):
+        if len(str_content) <= num:
+            return str_content
+
+        new = str_content[:num]
+        if pad is None:
+            return new
+
+        return f"{new}{pad}"
 
 
 if __name__ == '__main__':
-    print(StrProcess.get_str_inside_num("sadasd "))
+    # print(StrProcess.get_str_inside_num("sadasd "))
+    # print(StrProcess.specify_str_num_pad("asdjaksdjskafjlsdkfsdlfjskl",5,"..."))
+
+    pass
