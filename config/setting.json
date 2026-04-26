@@ -1,0 +1,59 @@
+{
+  "basic": {
+    "exe_name": "task_management",
+    "exe_message": "程序信息",
+    "version": "v1.0.2",
+    "update_time": "2026年2月",
+    "message": "      此程序使用 PyQt5GUI 库实现，可使用 -> 任务，AI聊天（需要配置所需的API_KEY等信息，建议使用星火Lite模型），日记等切换不同功能。如需个性化需求，在设置页面没有进行配置可以在，程序使用目录更改 config文件夹中的json文件，没有特殊情况不要删除或修改配置文件内容。qss文件，为程序内容显示，如需可以进行更改（使用技巧同 .css 文件有些属性可能不会生效）"
+  },
+  "backup": {
+    "auto_backup":true,
+    "auto_backup_id_name": "auto_backup_task_data",
+    "backup_time_minute": 1,
+    "backup_dir": "backup/task",
+    "click_backup_attention": "注意：备份会生成json 文件，保存在指定的备份目录中！",
+    "click_recover_warning": "警告：恢复数据将覆盖当前所有任务数据，请确保已做好备份！"
+  },
+  "appearance": {
+    "main_window": {
+      "width": 1280,
+      "height":650
+    },
+    "task_segmentation_window": {
+      "width": 650,
+      "height": 550
+    },
+     "diary_details_window": {
+      "width": 650,
+      "height": 550
+    },
+    "setting_window": {
+      "width": 750,
+      "height": 650
+    }
+  },
+  "notification": {
+    "misoperation_notification": true,
+    "tray_tips": true,
+    "task_up_leve_tips": true,
+    "task_timeout_tips": true,
+    "task_open_or_close": true,
+    "same_task_timer_minute": 1,
+    "setting_notification_attention": "注意：启用这些选项后，程序将在相应事件发生时向您发送通知提示！",
+    "send_test_attention":"注意：点击发送测试通知进行检测托盘弹窗是否生效，如果没有生效请查看设置是否开启，最后查看日志错误！"
+  },
+  "data_update": {
+    "update_time_second": 1,
+    "task_change_auto_save": true,
+    "data_update_attention": "注意：设置数据更新的时间间隔，较小的值数据会实时更新可能增加系统负担，自动保存功能可确保任务变更时不会丢失！",
+    "data_tips_attention": "注意：定期清理不需要的历史数据可以提高程序性能，优化操作会重新整理数据结构以提升程序响应速度！"
+  },
+  "shortcut": {
+    "close": {
+      "text": "关闭程序",
+      "key": "Alt + Q",
+      "tips": "提示：使用AIt+Q快捷键可以强制退出程序,请聚焦程序本体!"
+    }
+  }
+
+}

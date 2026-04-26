@@ -1,0 +1,11 @@
+#attention_label{
+    font-size:11px;
+    color:#666;
+    padding: 0px 5px 0px 5px;
+}
+
+#error_label{
+    font-size:11px;
+    color:#de4d73;
+    padding:0px 5px 0px 5px;
+}

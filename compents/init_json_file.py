@@ -1,9 +1,9 @@
-from compents.load_path import load_path
-from compents.load_path import LoadConfigPath
+
+from compents.load_path import config_manager,load_path
 from compents.file_process import FileProcess
 
 class InitJsonFile:
-    init_template = LoadConfigPath.init_path(load_path["template"])
+    init_template = config_manager.get_entity_config(path_key="template")
     def __init__(self):
 
 

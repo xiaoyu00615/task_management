@@ -1,0 +1,48 @@
+#label_style{
+    font-size:13px;
+    padding:4px 5px 4px 5px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+
+#value_style{
+    font-size:13px;
+    border:1px solid #dddddd;
+    padding: 4px 15px;
+    border-radius: 5px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+
+#title_border{
+    font-size:16px;
+    font-weight:bold;
+    padding:2px 5px 3px 5px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+
+#button_style{
+    padding:5px 10px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+
+#switch_style{
+    padding:0px 5px 0px 5px;
+    font-size:12px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+#switch:focus {
+    outline: none;  /* 指定按钮清除虚线 */
+}
+
+#spinbox_style{
+    border:1px solid #dddddd;
+    padding:2px 5px;
+    font-size:14px;
+    border-radius: 5px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+
+editor_style{
+    border:1px solid #dddddd;
+    padding:2px 5px;
+    font-size:14px;
+}

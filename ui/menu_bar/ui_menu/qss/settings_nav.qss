@@ -1,0 +1,44 @@
+/* 仅针对设置页面的专属搜索框 */
+QLineEdit#SettingsSearchEdit {
+    margin: 10px;
+    padding: 8px 12px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+}
+
+/* 仅针对设置页面的专属导航列表 */
+QListWidget#SettingsNavList {
+    background-color: #f8f9fa;
+    border: none;
+    outline: none;
+}
+
+/* 仅针对设置导航列表的专属项 */
+QListWidget#SettingsNavList::item {
+    font-family: "微软雅黑", "Microsoft YaHei";
+    font-size: 14px;
+    color: #34495e;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 12px;
+    border-left: 3px solid transparent;
+}
+
+/* 仅针对设置导航项的悬停样式 */
+QListWidget#SettingsNavList::item:hover {
+    background-color: #e8f4ff;
+    color: #409eff;
+}
+
+/* 仅针对设置导航项的选中样式 */
+QListWidget#SettingsNavList::item:selected {
+    background-color: #409eff;
+    color: #ffffff;
+    border-left: 3px solid #1976d2;
+}
+
+/* 取消导航列表选中虚线框（仅针对该列表） */
+QListWidget#SettingsNavList:focus {
+    outline: none;
+}

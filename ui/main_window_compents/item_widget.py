@@ -7,6 +7,31 @@ from compents.str_process import StrProcess
 from compents.load_path import load_path
 
 class ItemWidget(QWidget):
+    # 类级别的缓存，避免重复读取文件
+    _color_map_cache = None
+    _important_color_map = None
+    _urgency_color_map = None
+
+    @classmethod
+    def _init_color_maps(cls):
+        """
+        初始化颜色映射缓存
+        """
+        if cls._color_map_cache is None:
+            cls._color_map_cache = FileProcess.read_json(load_path["data_map"])
+            cls._important_color_map = cls._color_map_cache.get("importance_color_map",{"1": "#AAAAAA","2": "#777777","3": "#4488FF","4": "#4444FF"})
+            cls._urgency_color_map = cls._color_map_cache.get("urgency_color_map",{"0": {"solid": "#666666", "transparent_50": "rgba(102, 102, 102, 0.5)"},
+                                                                                "1": {"solid": "#FF4444", "transparent_50": "rgba(255, 68, 68, 0.5)"},
+                                                                                "2": {"solid": "#FF7744", "transparent_50": "rgba(255, 119, 68, 0.5)"},
+                                                                                "3": {"solid": "#FFAA44", "transparent_50": "rgba(255, 170, 68, 0.5)"},
+                                                                                "4": {"solid": "#FFDD44", "transparent_50": "rgba(255, 221, 68, 0.5)"},
+                                                                                "5": {"solid": "#FFFF44", "transparent_50": "rgba(255, 255, 68, 0.5)"},
+                                                                                "6": {"solid": "#DDFF44", "transparent_50": "rgba(221, 255, 68, 0.5)"},
+                                                                                "7": {"solid": "#AAFF44", "transparent_50": "rgba(170, 255, 68, 0.5)"},
+                                                                                "8": {"solid": "#77FF44", "transparent_50": "rgba(119, 255, 68, 0.5)"},
+                                                                                "9": {"solid": "#44FF44", "transparent_50": "rgba(68, 255, 68, 0.5)"},
+                                                                                "10": {"solid": "#AAAAAA", "transparent_50": "rgba(170, 170, 170, 0.5)"}})
+
     def __init__(self,task,list_layout,parent,index):
         super().__init__(parent)
         self.parent = parent
@@ -16,10 +41,12 @@ class ItemWidget(QWidget):
         # print(self.status,"ItemWidget_status")
         self.index = index
 
-        # 获取数据
-        self.color_map = FileProcess.read_json(load_path["data_map"])
-        self.important_color_map = self.color_map.get("importance_color_map",{"1": "#AAAAAA","2": "#777777","3": "#4488FF","4": "#4444FF"})
-        self.urgency_color_map = self.color_map.get("urgency_color_map",{"0": "#666666","1": "#FF4444","2": "#FF7744", "3": "#FFAA44","4": "#FFDD44","5": "#FFFF44","6": "#DDFF44","7": "#AAFF44","8": "#77FF44", "9": "#44FF44","10": "#AAAAAA"})
+        # 初始化颜色映射缓存
+        ItemWidget._init_color_maps()
+
+        # 使用缓存的颜色映射
+        self.important_color_map = ItemWidget._important_color_map
+        self.urgency_color_map = ItemWidget._urgency_color_map
 
         self.urgency_value = self.task.get('urgency', None)
         self.important_value = self.task.get('important', None)
@@ -195,12 +222,12 @@ class ItemWidget(QWidget):
         # 完成
         if self.status == "overtime" or self.status == "unfinished":
             complete_btn = QPushButton("完成")
-            complete_btn.clicked.connect(lambda: EventDef.on_complete_task(self.task,self.list_layout.values()))
+            complete_btn.clicked.connect(lambda: EventDef.on_complete_task(self.parent,self.task,self.list_layout.values()))
             btn_layout.addWidget(complete_btn)
 
         # 删除
         del_btn = QPushButton("删除")
-        del_btn.clicked.connect(lambda: EventDef.on_del_task(self.task, [self.parent]))
+        del_btn.clicked.connect(lambda: EventDef.on_del_task(self.parent,self.task, [self.parent]))
         btn_layout.addWidget(del_btn)
 
 

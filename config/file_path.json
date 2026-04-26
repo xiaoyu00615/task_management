@@ -1,16 +1,26 @@
 {
-  "template": "config/init.json",
-  "store":{
-    "task": "data/tasks.json",
-    "chat": "data/chats.json",
-    "diary": "data/diary.json"
-  },
-  "ai_chat": {
-    "api_key": "config/api_key.json",
-    "privacy": "privacy_data/api_key.json"
-  },
-  "data_map": "config/public.json",
-  "time":{
-    "data_refresh": 1000
-  }
+    "template": "config/init.json",
+    "store": {
+        "task": "data/tasks.json",
+        "chat": "data/chats.json",
+        "diary": "data/diary.json"
+    },
+    "ai_chat": {
+        "api_key": "config/api_key.json",
+        "privacy": "privacy_data/api_key.json"
+    },
+    "data_map": "config/public.json",
+    "time": {
+        "data_refresh": 1000
+    },
+    "prompt_box": {
+        "misoperation": false,
+        "diary_password_verification": false
+    },
+    "key": {
+        "diary": 579201
+    },
+    "menu_bar": {
+       "settings": "config/setting.json"
+    }
 }

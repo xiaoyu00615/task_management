@@ -52,10 +52,75 @@ QPushButton{
 QPushButton:focus {
     outline: none;  /* 指定按钮清除虚线 */
 }
-QPushButton:focus {
-    outline: none;  /* 全局按钮清除虚线 */
-}
 
 QScrollArea{
     border:none;
+}
+
+/* 垂直滚动条 */
+QScrollBar:vertical {
+    background-color: #f8f9fa;  /* 轨道背景，和边框块背景一致 */
+    width: 10px;                /* 滚动条宽度 */
+    border-radius: 5px;         /* 轨道圆角 */
+    margin: 0px 2px 0px 2px;    /* 轨道和控件边缘的间距 */
+}
+
+/* 水平滚动条 */
+QScrollBar:horizontal {
+    background-color: #f8f9fa;
+    height: 10px;               /* 滚动条高度 */
+    border-radius: 5px;
+    margin: 2px 0px 2px 0px;
+}
+
+/* ========== 滚动条滑块（核心美化） ========== */
+/* 垂直滑块 */
+QScrollBar::handle:vertical {
+    background-color: #dddddd;  /* 滑块默认颜色（和边框一致） */
+    border-radius: 5px;         /* 滑块圆角，和宽度匹配 */
+    min-height: 20px;           /* 滑块最小高度，避免过窄 */
+}
+
+/* 水平滑块 */
+QScrollBar::handle:horizontal {
+    background-color: #dddddd;
+    border-radius: 5px;
+    min-width: 20px;            /* 滑块最小宽度 */
+}
+
+/* 滑块hover态（和按钮hover呼应） */
+QScrollBar::handle:vertical:hover,
+QScrollBar::handle:horizontal:hover {
+    background-color: #a1fcaa;
+}
+
+/* 滑块按下态 */
+QScrollBar::handle:vertical:pressed,
+QScrollBar::handle:horizontal:pressed {
+    background-color: #c0392b;  /* 按下变深红色 */
+}
+
+/* ========== 隐藏默认的上下/左右箭头（更简洁） ========== */
+QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical {
+    height: 0px;  /* 隐藏垂直滚动条的上下箭头 */
+}
+QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
+    width: 0px;   /* 隐藏水平滚动条的左右箭头 */
+}
+
+/* ========== 滑块上下/左右的空白区域（点击时的翻页区域） ========== */
+QScrollBar::sub-page:vertical, QScrollBar::add-page:vertical {
+    background-color: transparent;  /* 透明，避免默认灰色 */
+}
+QScrollBar::sub-page:horizontal, QScrollBar::add-page:horizontal {
+    background-color: transparent;
+}
+
+/* ========== 滚动区域整体样式（可选，优化滚动容器） ========== */
+QScrollArea {
+    border: none;  /* 去掉滚动区域的默认边框 */
+    background-color: #f8f9fa;
+}
+QScrollArea > QWidget > QWidget {  /* 滚动区域的内容容器 */
+    background-color: transparent;
 }

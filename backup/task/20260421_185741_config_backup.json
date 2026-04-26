@@ -1,0 +1,113 @@
+{
+    "max_id": 83,
+    "max_segmentation_id": 20,
+    "unfinished_list": [
+        {
+            "id": 83,
+            "name": "器1313",
+            "create_time": "2026-04-21 18:49:08",
+            "end_time": "2026-04-21 19:19:01",
+            "completed_time": null,
+            "important": "1-重要且紧急",
+            "urgency": "1-立即",
+            "category": "学习",
+            "label": "（无标签）",
+            "weight": 88.0,
+            "status": "unfinished",
+            "segmentation": [
+                {
+                    "segmentation_id": 19,
+                    "name": "1321",
+                    "description": "123",
+                    "create_time": "2026-04-21 18:55:11",
+                    "status": "unfinished",
+                    "end_time": null
+                },
+                {
+                    "segmentation_id": 19,
+                    "name": "1321",
+                    "description": "123",
+                    "create_time": "2026-04-21 18:55:11",
+                    "status": "unfinished",
+                    "end_time": null
+                },
+                {
+                    "segmentation_id": 20,
+                    "name": "123",
+                    "description": "撒打算",
+                    "create_time": "2026-04-21 18:55:46",
+                    "status": "completed",
+                    "end_time": "2026-04-21 18:55:49"
+                },
+                {
+                    "segmentation_id": 20,
+                    "name": "123",
+                    "description": "撒打算",
+                    "create_time": "2026-04-21 18:55:46",
+                    "status": "completed",
+                    "end_time": "2026-04-21 18:55:49"
+                }
+            ]
+        }
+    ],
+    "overtime_list": [
+        {
+            "id": 79,
+            "name": "",
+            "create_time": "2026-02-19 19:37:24",
+            "end_time": "2026-02-19 20:07:19",
+            "completed_time": "2026-02-19 20:57:43",
+            "important": "1-重要且紧急",
+            "urgency": "1-立即",
+            "category": "学习",
+            "label": "（无标签）",
+            "weight": 88.0,
+            "status": "overtime",
+            "segmentation": []
+        },
+        {
+            "id": 80,
+            "name": "",
+            "create_time": "2026-02-19 19:37:24",
+            "end_time": "2026-02-19 20:07:19",
+            "completed_time": "2026-02-19 20:57:46",
+            "important": "1-重要且紧急",
+            "urgency": "1-立即",
+            "category": "学习",
+            "label": "（无标签）",
+            "weight": 88.0,
+            "status": "overtime",
+            "segmentation": []
+        },
+        {
+            "id": 81,
+            "name": "",
+            "create_time": "2026-02-19 19:37:24",
+            "end_time": "2026-02-19 20:07:19",
+            "completed_time": "2026-02-19 20:57:46",
+            "important": "1-重要且紧急",
+            "urgency": "1-立即",
+            "category": "学习",
+            "label": "（无标签）",
+            "weight": 88.0,
+            "status": "overtime",
+            "segmentation": []
+        }
+    ],
+    "completed_list": [
+        {
+            "id": 82,
+            "name": "",
+            "create_time": "2026-02-23 11:39:23",
+            "end_time": "2026-02-23 12:09:15",
+            "completed_time": "2026-02-23 11:39:39",
+            "important": "1-重要且紧急",
+            "urgency": "1-立即",
+            "category": "学习",
+            "label": "（无标签）",
+            "weight": 88.0,
+            "status": "completed",
+            "segmentation": []
+        }
+    ]
+}

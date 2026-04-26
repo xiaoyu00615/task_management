@@ -16,7 +16,6 @@ class QssLoadTool:
         logger.info("开始加载qss文件")
         qss_content = ""
         for path in file_paths:
-            path = os.path.join('qss', path)
             try:
                 with open(path, 'r', encoding='utf-8') as f:
                     qss_content += f.read() + "\n"  # 加换行符，避免样式连写报错

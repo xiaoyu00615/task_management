@@ -1,0 +1,95 @@
+/* 确认对话框整体样式 */
+QDialog {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+/* 对话框背景遮罩 */
+QDialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 文本显示区域样式（通过ObjectName精准定位） */
+#ConfirmDialogTextEdit {
+    background-color: transparent;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-size: 14px;
+    color: #343a40;
+    padding: 10px;
+    line-height: 1.5;
+}
+
+/* 文本区域滚动条样式 */
+#ConfirmDialogTextEdit QScrollBar:vertical {
+    width: 6px;
+    background-color: transparent;
+}
+
+#ConfirmDialogTextEdit QScrollBar::handle:vertical {
+    background-color: #ced4da;
+    border-radius: 3px;
+}
+
+#ConfirmDialogTextEdit QScrollBar::handle:vertical:hover {
+    background-color: #adb5bd;
+}
+
+#ConfirmDialogTextEdit QScrollBar::add-line:vertical,
+#ConfirmDialogTextEdit QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* 确认按钮样式（通过ObjectName精准定位） */
+#ConfirmDialogConfirmBtn {
+    background-color: #409eff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-size: 14px;
+}
+
+#ConfirmDialogConfirmBtn:hover {
+    background-color: #66b1ff;
+}
+
+#ConfirmDialogConfirmBtn:pressed {
+    background-color: #337ecc;
+}
+
+/* 取消按钮样式（通过ObjectName精准定位） */
+#ConfirmDialogCancelBtn {
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    border-radius: 8px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-size: 14px;
+}
+
+#ConfirmDialogCancelBtn:hover {
+    background-color: #dee2e6;
+}
+
+#ConfirmDialogCancelBtn:pressed {
+    background-color: #ced4da;
+}
+
+
+#ConfirmDialogNoPromptCheck {
+    color: #495057;
+    font-family: "微软雅黑", sans-serif;
+    font-size: 12px;
+}
+#ConfirmDialogNoPromptCheck::indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid #ced4da;
+}
+#ConfirmDialogNoPromptCheck::indicator:checked {
+    background-color: #409eff;
+    border-color: #409eff;
+    image: url(:/icons/check.png); /* 可选：添加勾选图标 */
+}

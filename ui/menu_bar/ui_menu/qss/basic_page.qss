@@ -1,0 +1,6 @@
+#border_widget{
+    border:2px solid #dddddd;
+    background-color:#f8f9fa;
+    border-radius: 8px;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}

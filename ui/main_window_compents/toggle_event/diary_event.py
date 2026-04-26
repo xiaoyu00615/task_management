@@ -1,8 +1,12 @@
 from compents.log import logger
 from compents.file_process import FileProcess
 from compents.find_data import FindData
+from compents_pyqt5.operation_confirm_dialog import use_operation_confirm_dialog_template
 from ui.main_window_compents.diary_compents.details_sub_window import DetailsSubWindow
 from compents.load_path import load_path
+from compents_pyqt5.password_config_dialog import use_password_confirm_dialog_template, PasswordConfirmDialog
+
+
 class DiaryEvent:
 
     @staticmethod
@@ -24,6 +28,15 @@ class DiaryEvent:
     def no_del_diary(this,this_list,data):
         logger.debug(f"删除日记数据 -> this {this} -> {data}")
 
+        if not use_operation_confirm_dialog_template({
+            "parent":this.parent,
+            "title":f"删除日记操作 -> {data['title']}",
+            "text":"要删除这篇日记吗，一旦删除将无法撤回，每一个用心写下的日记都要好好的珍藏！"
+        },{
+            "cancel_msg":f"取消删除日记 -> {data}",
+            "update_msg":f"此类提示窗状态更新！不再显示！"
+        }): return
+
         # 1. 前置校验：确保必要字段存在
         if not data.get("id"):
             logger.error("删除失败：日记数据缺少id字段")
@@ -37,7 +50,7 @@ class DiaryEvent:
             data_index = FindData.find_data(this_list.list_dict, data, "id")
             # print(data_index, "data_index")
 
-            # 关键：如果没找到目标索引，直接返回，避免删错数据
+            # 如果没找到目标索引，直接返回，避免删错数据
             if data_index == -1:
                 logger.warning(f"删除失败：未找到id为{data['id']}的日记")
                 return
@@ -123,6 +136,25 @@ class DiaryEvent:
     @staticmethod
     def no_details_diary(this,this_list,data,parent):
         logger.info("详细日记")
+        if not data["password"] is None:
+            if not use_password_confirm_dialog_template({
+                "parent":parent,
+                "title":'输入密码',
+                "prompt_text":"请输入密码，保管好日记哦！",
+            },{
+                "cancel_msg":f"忘记密码了吗 -> {data['password']}",
+                "update_msg": f"此类密码提示窗状态更新！不再显示！"
+            },{
+                "correct_password":data["password"],
+                "key":load_path["key"]["diary"]
+            }): return
+
+        # is_verify_pass, is_no_prompt = PasswordConfirmDialog.get_password_confirmation(
+        #     title="批量删除操作验证",
+        #     prompt_text="执行批量删除操作需要验证密码，请输入管理员密码："
+        # )
+        # print(is_verify_pass,is_no_prompt)
+
 
         data_index = FindData.find_data(this_list.list_dict, data, "id")
         this_list.list_dict[data_index]["reading_num"] += 1
@@ -131,5 +163,3 @@ class DiaryEvent:
         print(data,"进入data")
         details_sub_window = DetailsSubWindow(parent,data)
         details_sub_window.exec_()
-
-

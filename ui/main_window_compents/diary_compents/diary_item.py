@@ -43,10 +43,15 @@ class DiaryItem:
         details_diary.clicked.connect(lambda:DiaryEvent.no_details_diary(this,this_list,data_dict,parent))
         btn_layout.addWidget(details_diary)
 
+
         # 收藏
         collection_diary = QPushButton("收藏")
         collection_diary.clicked.connect(lambda: DiaryEvent.no_collection_diary(this,this_list,data_dict))
         btn_layout.addWidget(collection_diary)
+
+        if data_dict["type"] == "collection":
+            collection_diary.setText("取消收藏")
+
 
 
         # 删除

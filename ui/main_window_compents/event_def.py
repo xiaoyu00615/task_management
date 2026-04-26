@@ -3,6 +3,8 @@ from compents.log import logger
 from ui.uilt.assistant_def import AssistantDef
 from ui.sub_window.modal_segmentation import ModalSegmentation
 from compents.load_path import load_path
+from compents_pyqt5.operation_confirm_dialog import OperationConfirmDialog
+from compents_pyqt5.operation_confirm_dialog import use_operation_confirm_dialog_template
 
 
 class EventDef:
@@ -30,16 +32,34 @@ class EventDef:
 
 
     @staticmethod
-    def on_complete_task(task_data,update_list):
+    def on_complete_task(parent,task_data,update_list):
         logger.info(f"任务已完成触发事件 -> {task_data}数据")
+        if not use_operation_confirm_dialog_template({
+            "parent":parent,
+            "title":f"完成任务操作 -> {task_data['name']}",
+            "text":"已经完成了这个任务了吗，点击完成即可获得完成时间的专属印章，继续加油呀！！！"
+        },{
+            "cancel_msg":f"还没有完成任务哦 -> {task_data} 加油！",
+            "update_msg":f"此类提示窗状态更新！不再显示！"
+        }): return
 
         AssistantDef.task_status_change("completed",task_data,"data/tasks.json")
 
         EventDef.refresh_all_list(update_list)
 
     @staticmethod
-    def on_del_task(task_data,update_list):
+    def on_del_task(parent,task_data,update_list):
         logger.info(f"触发删除事件 -> {task_data}数据")
+
+        if not use_operation_confirm_dialog_template({
+            "parent":parent,
+            "title":f"删除任务操作 -> {task_data['name']}",
+            "text":"真的想删除这个任务吗，此操作不可撤回请考虑清楚，这也是你之前写过想要完成的任务不是吗？"
+        },{
+            "cancel_msg":f"不删除任务 -> {task_data} 嘿嘿加油！",
+            "update_msg":f"此类提示窗状态更新！不再显示！"
+        }): return
+
         AssistantDef.task_del(task_data,load_path["store"]["task"])
 
         EventDef.refresh_all_list(update_list)

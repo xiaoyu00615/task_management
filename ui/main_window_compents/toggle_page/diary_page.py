@@ -15,6 +15,7 @@ from ui.uilt.assistant_def import AssistantDef
 from ui.main_window_compents.diary_compents.list_weight import ListWeight
 from ui.main_window_compents.toggle_event.diary_event import DiaryEvent
 from compents.load_path import load_path
+from compents.simple_cryptor import SimpleCryptor
 
 class DiaryPage:
     def __init__(self,parent):
@@ -134,6 +135,18 @@ class DiaryPage:
         self.diary_content_text.setObjectName("entry_style")
         content_block_layout.addWidget(self.diary_content_text)
 
+        # 加密文本
+        password_label = QLabel("将这篇日记锁起来!")
+        password_label.setObjectName("label_style")
+        content_block_layout.addWidget(password_label)
+
+        # 加密
+        self.password_entry = QLineEdit()
+        self.password_entry.setPlaceholderText("输入你的日记密码（选填）")
+        self.password_entry.setObjectName("entry_style")
+        self.password_entry.setEchoMode(QLineEdit.Password)
+        content_block_layout.addWidget(self.password_entry)
+
         # 我写完啦
         write_ok = QPushButton()
         write_ok.setFixedWidth(200)
@@ -173,6 +186,17 @@ class DiaryPage:
 
         max_id += 1
 
+
+        encryption_password = None
+        key = load_path["key"]["diary"]
+        password = self.password_entry.text().strip()
+        if not password:
+            encryption_password = None
+        else:
+            encryption = SimpleCryptor(key=key)
+            encryption_password = encryption.encrypt(password)
+
+        # print(encryption_password,"值")
         obj = {
             "id": max_id,
             "title":self.diary_title_entry.text().strip(),
@@ -183,7 +207,8 @@ class DiaryPage:
             "create_time":self.now_time_label.text().strip(),
             "create_stamp":datetime.datetime.now().timestamp(),
             "type":"ordinary",
-            "reading_num":0
+            "reading_num":0,
+            "password":encryption_password
         }
 
         self.diary_title_entry.setText("")
@@ -191,6 +216,7 @@ class DiaryPage:
         self.diary_emotion_entry.setText("")
         self.diary_weather_entry.setText("")
         self.diary_content_text.setText("")
+        self.password_entry.setText("")
 
         return obj
 

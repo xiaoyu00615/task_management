@@ -15,6 +15,7 @@ class ListLayout(QWidget):
         self.parent = parent
 
         self.choose_list = None
+        self.original_list = None  # 存储原始任务列表
         self._init_ui()
 
 
@@ -47,7 +48,8 @@ class ListLayout(QWidget):
         }
         if self.status:
             get_data = self.get_all_tasks()
-            self.choose_list = get_data.get(f"{self.status}_list",[])
+            self.original_list = get_data.get(f"{self.status}_list",[])
+            self.choose_list = self.original_list.copy()
 
         if self.status == "unfinished":
             self.main_window.unfinished_list_task_data = self.choose_list
@@ -111,9 +113,38 @@ class ListLayout(QWidget):
 
         if self.status:
             get_data = self.get_all_tasks()
-            self.choose_list = get_data.get(f"{self.status}_list",[])
+            self.original_list = get_data.get(f"{self.status}_list",[])
+            self.choose_list = self.original_list.copy()
             # logger.debug(f"刷新列表 -> {self.choose_list}")
 
         self.label_value.setText(f"{self.text_map.get(self.status,None)}:({len(self.choose_list)})")
 
+        self._load_items()
+    
+    def filter_tasks(self, search_text=None, filter_category=None):
+        """筛选任务
+        
+        Args:
+            search_text: 搜索文本
+            filter_category: 筛选分类
+        """
+        if not self.original_list:
+            return
+        
+        # 重置为原始列表
+        filtered_tasks = self.original_list.copy()
+        
+        # 应用搜索过滤
+        if search_text:
+            search_text = search_text.lower()
+            filtered_tasks = [task for task in filtered_tasks if search_text in task.get('name', '').lower()]
+        
+        # 应用分类过滤
+        if filter_category:
+            filtered_tasks = [task for task in filtered_tasks if task.get('category') == filter_category]
+        
+        # 更新列表并重新加载
+        self.choose_list = filtered_tasks
+        self.del_all_tasks_ui()
+        self.label_value.setText(f"{self.text_map.get(self.status,None)}:({len(self.choose_list)})")
         self._load_items()

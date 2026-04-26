@@ -1,6 +1,6 @@
 import datetime
 
-from PyQt5.QtCore import QDateTime, QTimer, Qt
+from PyQt5.QtCore import QDateTime, QTimer, Qt, QThreadPool, QRunnable, pyqtSignal, QObject
 from PyQt5.QtWidgets import QLabel, QWidget, QLineEdit, QComboBox, QDateTimeEdit, QPushButton, \
     QHBoxLayout, QVBoxLayout, QStackedWidget
 
@@ -8,25 +8,80 @@ from compents.log import logger
 from compents.file_process import FileProcess
 from compents.time_process import TimeProcess
 from compents.calculate_process import CalculateProcess
+from compents.notification import NotificationTool
 
 from ui.main_window_compents.event_def import EventDef
 from ui.uilt.assistant_def import AssistantDef
 from ui.main_window_compents.toggle_page.chat_page import ChatPage
 from ui.main_window_compents.toggle_page.task_page import TaskPage
 from ui.main_window_compents.toggle_page.diary_page import DiaryPage
-from compents.load_path import load_path
+from compents.load_path import load_path, config_manager
+from compents_pyqt5.pyqt5_set_timer import Pyqt5SetTimer
+from compents_setting.backup_json_data import BackupJsonData
 
+
+class TaskCheckerSignals(QObject):
+    """任务检查信号类"""
+    task_updated = pyqtSignal()
+
+class TaskChecker(QRunnable):
+    """任务检查线程"""
+    def __init__(self, main_window):
+        super().__init__()
+        self.main_window = main_window
+        self.signals = TaskCheckerSignals()
+        
+    def run(self):
+        """运行任务检查"""
+        try:
+            # 检查任务超时和接近截止时间
+            for task in self.main_window.unfinished_list_task_data:
+                end_time = task.get("end_time", None)
+                if not end_time:
+                    continue
+                
+                # 检查是否超时
+                has_overtime = AssistantDef.is_task_timeout(end_time)
+                if has_overtime:
+                    AssistantDef.task_status_change("overtime", task, load_path["store"]["task"])
+                    # 发送信号通知UI更新
+                    self.signals.task_updated.emit()
+                else:
+                    # 检查是否接近截止时间
+                    if TimeProcess.is_task_near_deadline(end_time):
+                        task_name = task.get("name", "未命名任务")
+                        NotificationTool.send_task_reminder(task_name, end_time)
+                
+                # 检查紧急度提升
+                old_urgency = task.get("urgency", None)
+                is_update = AssistantDef.is_upgrade_urgency(old_urgency, end_time)
+                if is_update:
+                    # 修改紧急度
+                    task["urgency"] = is_update
+                    # 修改权重
+                    important_value = task.get("important", None)
+                    weight_value = CalculateProcess.calculate_task_weight(important_value, is_update)
+                    task["weight"] = weight_value
+                    FileProcess.write_json_attribute(load_path["store"]["task"], ["unfinished_list"], self.main_window.unfinished_list_task_data)
+                    # 发送信号通知UI更新
+                    self.signals.task_updated.emit()
+        except Exception as e:
+            logger.error(f"任务检查线程出错：{e}")
 
 class MainWindowUI(QWidget):
+    setting_path = config_manager.get_entity_config(path_key="menu_bar/settings")
     def __init__(self,parent=None):
         super().__init__(parent)
         self.parent = parent
         self.unfinished_list_task_data = []
-        self.timer_ms = load_path["time"]["data_refresh"]
         self.all_list = {}
+        # 初始化线程池
+        self.thread_pool = QThreadPool()
+        logger.info(f"线程池初始化完成，最大线程数：{self.thread_pool.maxThreadCount()}")
         logger.info("主窗口UI控件类")
         self._init_ui()
-        self._init_time()
+        self._init_timer()
+
 
     def _init_ui(self):
         logger.info("正在创建MainWindowUI")
@@ -235,55 +290,85 @@ class MainWindowUI(QWidget):
         self.task_name_line_edit.setText("")
         return obj
 
-    def _init_time(self):
-        """
-        初始化时间定时器
-        :return:
-        """
-        # 实例化
-        self.timer = QTimer(self.parent)
-        # 设定时间
-        self.timer.setInterval(self.timer_ms)
-        # 绑定触发方法
-        self.timer.timeout.connect(self.auto_refresh_list)
-        # 启动
-        self.timer.start()
+    def _init_timer(self):
+        window_timer_ms = load_path["time"]["data_refresh"]
+        Pyqt5SetTimer.init_task_timer("window_refresh_list",window_timer_ms,self.auto_refresh_list,self.parent)
 
-        # logger.info(f"已开始计时器自动刷新数据 -> {self.timer_ms}")
+
+        has_auto_backup = MainWindowUI.setting_path["backup"]["auto_backup"]
+        if has_auto_backup:
+            # 获取备份间隔（毫秒）
+            auto_backup_timer = MainWindowUI.setting_path["backup"]["backup_time_minute"]
+            auto_backup_second = auto_backup_timer * 60 * 1000
+
+            # 初始化自动备份计时器（修正：传函数引用 + 补充parent参数）
+            Pyqt5SetTimer.init_task_timer(
+                "auto_backup_task_data",
+                auto_backup_second,
+                self.auto_backup_callback,
+                self.parent
+            )
+
+    def _update_auto_backup_timer(self):
+        """手动触发：更新自动备份计时器（配置修改后调用）"""
+        # 读取最新配置
+        latest_auto_backup = MainWindowUI.setting_path["backup"]["auto_backup"]
+        latest_backup_ms = MainWindowUI.setting_path["backup"]["backup_time_minute"] * 60 * 1000
+
+        if latest_auto_backup:
+            # 开关开启：更新/创建计时器
+            if Pyqt5SetTimer._timer_instances.get("auto_backup_task_data"):
+                Pyqt5SetTimer.update_task_timer_interval("auto_backup_task_data", latest_backup_ms)
+            else:
+                Pyqt5SetTimer.init_task_timer(
+                    "auto_backup_task_data",
+                    latest_backup_ms,
+                    self.auto_backup_callback,
+                    self.parent
+                )
+        else:
+            # 开关关闭：停止计时器
+            Pyqt5SetTimer.remove_task_timer("auto_backup_task_data")
+
+    def auto_backup_callback(self):
+        """自动备份的回调函数（每次触发时读取最新数据）"""
+        try:
+            # 每次备份都读取最新的任务数据（修正静态数据问题）
+            task_json = FileProcess.read_json(load_path["store"]["task"])
+            # 备份时间：分钟转毫秒
+            auto_backup_timer = MainWindowUI.setting_path["backup"]["backup_time_minute"]
+            auto_backup_second = auto_backup_timer * 60 * 1000
+            # 备份路径
+            save_path = MainWindowUI.setting_path["backup"]["backup_dir"]
+            # 执行备份
+            BackupJsonData.backup_json(task_json, save_path)
+            print(f"自动备份成功，备份路径：{save_path}")
+        except Exception as e:
+            print(f"自动备份失败：{e}")  # 异常捕获，避免计时器崩溃
+
 
 
     def is_all_list_overtime(self):
-        # print(self.unfinished_list_task_data,"self.unfinished_list_task_data")
-        for task in self.unfinished_list_task_data:
-            # print(self.unfinished_list_task_data,"unfinished_list_task_data")
-            # 判断超时
-            end_time = task.get("end_time",None)
-
-            has_overtime = AssistantDef.is_task_timeout(end_time)
-            # print(has_overtime,"我超时了吗",task,"这个任务")
-            if has_overtime:
-                AssistantDef.task_status_change("overtime",task,load_path["store"]["task"])
-                self.all_list["overtime"].refresh_list()
-                self.all_list["unfinished"].refresh_list()
-
-                self.unfinished_list_task_data = AssistantDef.del_list_item_dict(self.unfinished_list_task_data,task)
-
-            # 紧急度提升
-            old_urgency = task.get("urgency", None)
-            is_update = AssistantDef.is_upgrade_urgency(old_urgency,end_time)
-            if is_update:
-                # 修改紧急度
-                task["urgency"] = is_update
-
-                # 修改权重
-                # 重要度
-                important_value = task.get("important",None)
-                # 权重值
-                weight_value = CalculateProcess.calculate_task_weight(important_value,is_update)
-                task["weight"] = weight_value
-
-                FileProcess.write_json_attribute(load_path["store"]["task"],["unfinished_list"],self.unfinished_list_task_data)
-                self.all_list["unfinished"].refresh_list()
+        """
+        检查任务超时和接近截止时间
+        使用线程池处理，避免阻塞主线程
+        """
+        # 创建任务检查线程
+        task_checker = TaskChecker(self)
+        # 连接信号
+        task_checker.signals.task_updated.connect(self._on_task_updated)
+        # 提交到线程池
+        self.thread_pool.start(task_checker)
+    
+    def _on_task_updated(self):
+        """
+        任务更新后的回调函数
+        """
+        # 刷新任务列表
+        if "overtime" in self.all_list:
+            self.all_list["overtime"].refresh_list()
+        if "unfinished" in self.all_list:
+            self.all_list["unfinished"].refresh_list()
 
 
 
@@ -304,6 +389,7 @@ class MainWindowUI(QWidget):
 
     def _switch_page(self,index):
         # 切换页面
+        self.stacked_weight.setCurrentIndex(index)
         self.stacked_weight.setCurrentIndex(index)
 
         # 更新状态

@@ -131,6 +131,26 @@ class TimeProcess:
         week_num = now_date.weekday()
         week_list = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
         return week_list[week_num]
+    
+    @staticmethod
+    def get_current_time():
+        """
+        获取当前时间
+        :return: str
+        """
+        return datetime.datetime.now().strftime(TimeProcess.FORMAT_TEMPLATE)
+    
+    @staticmethod
+    def is_task_near_deadline(end_time, minutes=5):
+        """
+        检查任务是否接近截止时间
+        :param end_time: 任务截止时间
+        :param minutes: 提前提醒的分钟数
+        :return: bool
+        """
+        current_time = TimeProcess.get_current_time()
+        time_diff = TimeProcess.calculate_time_poor(current_time, end_time)
+        return 0 < time_diff <= minutes * 60
 
 
 

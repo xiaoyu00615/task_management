@@ -1,0 +1,7 @@
+#title_label{
+    font-size:24px;
+    padding:6px 0px 10px 0;
+    font-weight:bold;
+    font-family: "Microsoft YaHei UI", "微软雅黑", sans-serif;
+}
+

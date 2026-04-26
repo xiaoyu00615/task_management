@@ -123,7 +123,7 @@ class ModalSegmentation(QDialog):
     def get_data(self):
         max_segmentation_id = FileProcess.read_json_attribute(load_path["store"]["task"],["max_segmentation_id"])
 
-        return {
+        obj = {
             "segmentation_id": max_segmentation_id + 1,
             "name": self.task_name_line_edit.text().strip(),
             "description": self.task_lines_value.toPlainText().strip(),
@@ -131,6 +131,11 @@ class ModalSegmentation(QDialog):
             "status":"unfinished",
             "end_time":None
         }
+
+        self.task_name_line_edit.setText("")
+        self.task_lines_value.setText("")
+
+        return obj
 
 
     def create_task_item_ui(self,task,index):
@@ -153,6 +158,12 @@ class ModalSegmentation(QDialog):
 
         description_ql = QLabel(f"任务描述：{task.get("description", None)}")
         description_ql.setObjectName("segmentation_content")
+        # 设置自动换行
+        description_ql.setWordWrap(True)
+        # 设置文本对齐方式
+        description_ql.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        # 限制最大宽度，确保在滚动区域内
+        description_ql.setMaximumWidth(300)
 
         task_item_down_layout.addWidget(description_ql)
 
@@ -181,13 +192,14 @@ class ModalSegmentation(QDialog):
         del_btn.setText("删除")
         del_btn.clicked.connect(lambda :EventModalSegmentation.on_del_segmentation_task(self,self.task,task))
 
-        com_btn = QPushButton()
-        com_btn.setText("完成")
-        com_btn.clicked.connect(lambda : EventModalSegmentation.on_complete_segmentation_task(self,self.task,task))
+        if task["status"] == "unfinished":
+            com_btn = QPushButton()
+            com_btn.setText("完成")
+            com_btn.clicked.connect(lambda : EventModalSegmentation.on_complete_segmentation_task(self,self.task,task))
 
+
+            btn_layout.addWidget(com_btn)
         btn_layout.addWidget(del_btn)
-        btn_layout.addWidget(com_btn)
-
 
 
         task_item_down_layout.addWidget(btn_widget)
@@ -199,9 +211,15 @@ class ModalSegmentation(QDialog):
     def create_all_task(self,task_list):
         # print("task_list",task_list)
 
+        # 确保 task_list 是一个列表
+        if not isinstance(task_list, list):
+            task_list = []
+
         for index,item in enumerate(task_list):
-            # print(item,"create_all_task")
-            self.create_task_item_ui(item,index+1)
+            # 确保 item 是一个字典
+            if isinstance(item, dict):
+                # print(item,"create_all_task")
+                self.create_task_item_ui(item,index+1)
 
 
     def del_all_tasks_ui(self):
@@ -217,6 +235,10 @@ class ModalSegmentation(QDialog):
 
 
         self.del_all_tasks_ui()
+
+        # 确保 segmentation 是一个列表
+        if "segmentation" not in task_list_item or not isinstance(task_list_item["segmentation"], list):
+            task_list_item["segmentation"] = []
 
         sort_list = task_list_item["segmentation"][::-1]
 
@@ -236,8 +258,12 @@ class ModalSegmentation(QDialog):
 
 
     def del_segmentation_tasks(self,task_list,task):
+        # 确保 segmentation 是一个列表
+        if "segmentation" not in task_list or not isinstance(task_list["segmentation"], list):
+            task_list["segmentation"] = []
+        
         for index,item in enumerate(task_list["segmentation"]):
-            if item["segmentation_id"] == task["segmentation_id"]:
+            if isinstance(item, dict) and "segmentation_id" in item and item["segmentation_id"] == task["segmentation_id"]:
                 task_list["segmentation"].pop(index)
                 break
         return task_list
